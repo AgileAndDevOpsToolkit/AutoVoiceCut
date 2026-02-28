@@ -6,7 +6,7 @@
  * Requires: ffmpeg
  *
  * Usage:
- *   php split_on_silence.php --in "/path/to/audio.wav" --outdir "/path/to/out" [--maxlen 180] [--silence_db -35] [--silence_dur 0.35] [--format wav]
+ *   php 1_split_on_silence.php --in "/path/to/audio.wav" --outdir "/path/to/out" [--maxlen 180] [--silence_db -35] [--silence_dur 0.35] [--format wav]
  *
  * Notes:
  * - If no suitable silence is found near the target boundary, falls back to a hard cut at maxLen.
@@ -19,7 +19,7 @@ function usageAndExit(string $msg = ''): void {
     if ($msg !== '') fwrite(STDERR, $msg . PHP_EOL);
     $u = <<<TXT
 Usage:
-  php split_on_silence.php --in "/path/to/input.(wav|mp3|mp4|mkv)" --outdir "/path/to/out"
+  php 1_split_on_silence.php --in "/path/to/input.(wav|mp3|mp4|mkv)" --outdir "/path/to/out"
       [--maxlen 180] [--silence_db -35] [--silence_dur 0.35] [--format wav]
       [--prefer_window 12] [--min_chunk 20]
 
@@ -34,7 +34,7 @@ Options:
   --min_chunk      Minimum chunk duration (seconds) to avoid tiny chunks (default: 20)
 
 Example:
-  php split_on_silence.php --in "/mnt/c/.../audio.wav" --outdir "./chunks" --maxlen 180 --silence_db -35 --silence_dur 0.35 --format wav
+  php 1_split_on_silence.php --in "/mnt/c/.../audio.wav" --outdir "./chunks" --maxlen 180 --silence_db -35 --silence_dur 0.35 --format wav
 
 TXT;
     fwrite(STDERR, $u);

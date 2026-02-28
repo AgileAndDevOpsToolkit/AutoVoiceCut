@@ -4,9 +4,9 @@
  *   php master_crisperwhisper.php "/path/to/video.mkv|mp4"
  *
  * This script must be in the same folder as:
- *   - split_on_silence.php
- *   - transcribe_chunks_and_merge.php
- *   - remove_filler_singlepass_v3.php
+ *   - 1_split_on_silence.php
+ *   - 2_transcribe_chunks_and_merge.php
+ *   - 3_remove_filler_singlepass_v3.php
  */
 
 /* =========================
@@ -65,9 +65,9 @@ if (!is_file($inputVideo)) {
 }
 
 $workdir = __DIR__;
-$splitScript        = $workdir . "/split_on_silence.php";
-$transcribeScript   = $workdir . "/transcribe_chunks_and_merge.php";
-$removeFillerScript = $workdir . "/remove_filler_singlepass_v3.php";
+$splitScript        = $workdir . "/1_split_on_silence.php";
+$transcribeScript   = $workdir . "/2_transcribe_chunks_and_merge.php";
+$removeFillerScript = $workdir . "/3_remove_filler_singlepass_v3.php";
 
 foreach (array($splitScript, $transcribeScript, $removeFillerScript) as $p) {
     if (!is_file($p)) fail("Missing script in same folder: " . $p);

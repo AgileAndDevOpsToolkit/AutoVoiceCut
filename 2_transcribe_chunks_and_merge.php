@@ -6,7 +6,7 @@
  * - full_transcript.srt (grouped subtitles)
  *
  * Usage:
- *   php transcribe_chunks_and_merge.php \
+ *   php 2_transcribe_chunks_and_merge.php \
  *     --chunksdir ./chunks \
  *     --offsets ./chunks/offsets.json \
  *     --transcribe /path/to/CrisperWhisper/transcribe.py \

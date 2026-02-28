@@ -1,6 +1,6 @@
 <?php
 /**
- * remove_filler_singlepass.php
+ * 3_remove_filler_singlepass_v3.php
  *
  * Single-pass FFmpeg version: removes filler words (e.g., "heu", "euh", "[UH]", "[UM]") from an MP4
  * using ONE ffmpeg command with select/aselect filters (no intermediate segment files).
@@ -13,7 +13,7 @@
  * - (Optional) NVIDIA GPU for h264_nvenc
  *
  * Example:
- * php remove_filler_singlepass.php \
+ * php 3_remove_filler_singlepass_v3.php \
  *   --input "input.mp4" \
  *   --transcript "03_Transcript_avec_timecodes.txt" \
  *   --output "output_clean.mp4" \
