@@ -91,6 +91,11 @@ $lines[] = "set -euo pipefail";
 $lines[] = "cd " . q($workdir);
 $lines[] = 'echo "[INFO] Working dir: $(pwd)"';
 $lines[] = 'echo "[INFO] Input video: ' . addslashes($inputVideo) . '"';
+$lines[] = 'echo ""';
+$lines[] = 'echo "========================================================================"';
+$lines[] = 'echo "========== CRISPERWHISPER AUDIO PROCESSING PIPELINE =========="';
+$lines[] = 'echo "========================================================================"';
+$lines[] = 'echo ""';
 
 // Conda bootstrap (IMPORTANT: use single quotes in PHP strings when bash uses $VAR)
 $lines[] = 'echo "[INFO] Activating conda env: ' . addslashes($CONDA_ENV_NAME) . '"';
@@ -113,9 +118,7 @@ $lines[] = cmd(array(
 ));
 
 // 3) Split on silence
-$lines[] = 'echo "[INFO] Splitting on silence into: ' . addslashes($CHUNKS_DIR) . '"';
-$lines[] = "mkdir -p " . q($CHUNKS_DIR);
-$lines[] = cmd(array(
+$splitCmd = cmd(array(
     "php", q($splitScript),
     "--in=" . q($AUDIO_WAV),
     "--outdir=" . q($CHUNKS_DIR),
@@ -124,16 +127,26 @@ $lines[] = cmd(array(
     "--silence_dur=" . q($SPLIT_SILENCE_DUR),
     "--format=" . q($SPLIT_FORMAT),
 ));
+$lines[] = 'echo ""';
+$lines[] = 'echo "=============== SCRIPT 1/3: SPLIT ON SILENCE ==============="';
+$lines[] = 'echo "Command: ' . addslashes($splitCmd) . '"';
+$lines[] = 'echo "=============================================================="';
+$lines[] = "mkdir -p " . q($CHUNKS_DIR);
+$lines[] = $splitCmd;
 
 // 4) Transcribe and merge
-$lines[] = 'echo "[INFO] Transcribing chunks and merging transcripts"';
-$lines[] = cmd(array(
+$transcribeCmd = cmd(array(
     "php", q($transcribeScript),
     "--chunksdir=" . q($CHUNKS_DIR),
     "--offsets", q($CHUNKS_DIR . "/offsets.json"),
     "--transcribe", q($TRANSCRIBE_PY),
     "--python", q($PYTHON_BIN),
 ));
+$lines[] = 'echo ""';
+$lines[] = 'echo "=============== SCRIPT 2/3: TRANSCRIBE & MERGE ==============="';
+$lines[] = 'echo "Command: ' . addslashes($transcribeCmd) . '"';
+$lines[] = 'echo "=============================================================="';
+$lines[] = $transcribeCmd;
 
 // 5) Convert to mp4 if needed
 if ($ext !== 'mp4') {
@@ -149,8 +162,7 @@ if ($ext !== 'mp4') {
 }
 
 // 6) Remove fillers
-$lines[] = 'echo "[INFO] Removing fillers => ' . addslashes($RF_OUTPUT_CLEAN) . '"';
-$lines[] = cmd(array(
+$removeCmd = cmd(array(
     "php", q($removeFillerScript),
     "--input", q($mp4Video),
     "--transcript", q($RF_TRANSCRIPT),
@@ -167,8 +179,16 @@ $lines[] = cmd(array(
     "--ab=" . q($RF_AB),
     "--progress=" . q($RF_PROGRESS),
 ));
+$lines[] = 'echo ""';
+$lines[] = 'echo "=============== SCRIPT 3/3: REMOVE FILLERS ==============="';
+$lines[] = 'echo "Command: ' . addslashes($removeCmd) . '"';
+$lines[] = 'echo "=============================================================="';
+$lines[] = $removeCmd;
 
+$lines[] = 'echo ""';
+$lines[] = 'echo "================ ALL SCRIPTS COMPLETED SUCCESSFULLY ================"';
 $lines[] = 'echo "[DONE] Output: ' . addslashes($RF_OUTPUT_CLEAN) . '"';
+$lines[] = 'echo "===================================================================="';
 
 $scriptContent = implode("\n", $lines) . "\n";
 if (file_put_contents($tmpSh, $scriptContent) === false) {
