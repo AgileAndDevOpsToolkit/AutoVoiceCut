@@ -241,7 +241,6 @@ AutoVoiceCut/
     └── full_transcript.srt
 ```
 
-```markdown
 <!-- ## License -->
 
 <!-- ## Contributing -->
@@ -265,7 +264,6 @@ AutoVoiceCut/
 <!-- ## Documentation -->
 
 <!-- ## License Information -->
-```
 
 ## Disclaimer
 
