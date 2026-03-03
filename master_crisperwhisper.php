@@ -1,7 +1,7 @@
 <?php
 /**
  * Usage:
- *   php master_crisperwhisper.php "/path/to/video.mkv|mp4"
+ *   php master_crisperwhisper.php "/path/to/video.mkv|mp4" "/path/to/transcribe.py"
  *
  * This script must be in the same folder as:
  *   - 1_split_on_silence.php
@@ -10,7 +10,7 @@
  */
 
 /* =========================
- * Params for LAST script only (remove_filler_singlepass_v3.php)
+ * Params for LAST script only (3_remove_filler_singlepass_v3.php)
  * ========================= */
 $RF_WORDS        = "heu,heu.,euh,[UH],[UM]";
 $RF_PAD_BEFORE   = 0.15;
@@ -39,8 +39,6 @@ $SPLIT_MAXLEN      = 180;
 $SPLIT_SILENCE_DB  = -45;
 $SPLIT_SILENCE_DUR = 0.5;
 $SPLIT_FORMAT      = "wav";
-
-$TRANSCRIBE_PY = "/path/to/CrisperWhisper/transcribe.py";
 $PYTHON_BIN    = "python";
 
 /* =========================
@@ -56,12 +54,16 @@ function cmd(array $parts) { return implode(' ', $parts); }
 /* =========================
  * Args
  * ========================= */
-if ($argc !== 2) {
-    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\"");
+if ($argc !== 3) {
+    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\" \"/path/to/transcribe.py\"");
 }
 $inputVideo = $argv[1];
 if (!is_file($inputVideo)) {
     fail("Input video not found: " . $inputVideo);
+}
+$TRANSCRIBE_PY = $argv[2];
+if (!is_file($TRANSCRIBE_PY)) {
+    fail("Transcribe script not found: " . $TRANSCRIBE_PY);
 }
 
 $workdir = __DIR__;
