@@ -39,6 +39,8 @@ $SPLIT_MAXLEN      = 180;
 $SPLIT_SILENCE_DB  = -45;
 $SPLIT_SILENCE_DUR = 0.5;
 $SPLIT_FORMAT      = "wav";
+
+$TRANSCRIBE_PY = "/path/to/CrisperWhisper/transcribe.py";
 $PYTHON_BIN    = "python";
 
 /* =========================
@@ -54,17 +56,14 @@ function cmd(array $parts) { return implode(' ', $parts); }
 /* =========================
  * Args
  * ========================= */
-if ($argc !== 3) {
-    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\" \"/path/to/transcribe.py\"");
+if ($argc !== 2) {
+    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\"");
 }
 $inputVideo = $argv[1];
 if (!is_file($inputVideo)) {
     fail("Input video not found: " . $inputVideo);
 }
-$TRANSCRIBE_PY = $argv[2];
-if (!is_file($TRANSCRIBE_PY)) {
-    fail("Transcribe script not found: " . $TRANSCRIBE_PY);
-}
+-$TRANSCRIBE_PY = $argv[2];
 
 $workdir = __DIR__;
 $splitScript        = $workdir . "/1_split_on_silence.php";
@@ -131,7 +130,7 @@ $splitCmd = cmd(array(
 ));
 $lines[] = 'echo ""';
 $lines[] = 'echo "=============== SCRIPT 1/3: SPLIT ON SILENCE ==============="';
-$lines[] = 'echo "Command: ' . addslashes($splitCmd) . '"';
+$lines[] = 'echo "Command: ' . $splitCmd . '"';
 $lines[] = 'echo "=============================================================="';
 $lines[] = "mkdir -p " . q($CHUNKS_DIR);
 $lines[] = $splitCmd;
@@ -146,7 +145,7 @@ $transcribeCmd = cmd(array(
 ));
 $lines[] = 'echo ""';
 $lines[] = 'echo "=============== SCRIPT 2/3: TRANSCRIBE & MERGE ==============="';
-$lines[] = 'echo "Command: ' . addslashes($transcribeCmd) . '"';
+$lines[] = 'echo "Command: ' . $transcribeCmd . '"';
 $lines[] = 'echo "=============================================================="';
 $lines[] = $transcribeCmd;
 
@@ -183,7 +182,7 @@ $removeCmd = cmd(array(
 ));
 $lines[] = 'echo ""';
 $lines[] = 'echo "=============== SCRIPT 3/3: REMOVE FILLERS ==============="';
-$lines[] = 'echo "Command: ' . addslashes($removeCmd) . '"';
+$lines[] = 'echo "Command: ' . $removeCmd . '"';
 $lines[] = 'echo "=============================================================="';
 $lines[] = $removeCmd;
 
