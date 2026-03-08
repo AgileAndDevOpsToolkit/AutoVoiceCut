@@ -1,17 +1,17 @@
 # AutoVoiceCut
 
-## Description
+## 📝 Description
 
 AutoVoiceCut is an automated audio processing pipeline that removes filler words (like "heu", "euh", "[UH]", "[UM]") from video files using speech recognition and FFmpeg. The pipeline splits audio intelligently on silence detection, transcribes the chunks using CrisperWhisper, and removes unwanted words while maintaining video quality.
 
-## Features
+## ✨ Features
 
 - 🎵 **Silence detection** - Splits audio at natural pauses (improves performance by processing smaller chunks)
 - 🤖 **Automatic transcription** - Uses CrisperWhisper for accurate speech-to-text (enables efficient filler word recognition on smaller text segments)
 - 🗑️ **Filler word removal** - Cleanly removes specified filler words from both audio and video
 - 🎬 **Multi-format support** - Handles MKV input files and exports to MP4 format
 
-## Prerequisites
+## 📋 Prerequisites
 
 ### Required
 
@@ -24,7 +24,7 @@ AutoVoiceCut is an automated audio processing pipeline that removes filler words
 
 - NVIDIA GPU for hardware video encoding (h264_nvenc codec)
 
-## Installation
+## 📦 Installation
 
 ```bash
 # Clone the repository
@@ -44,7 +44,7 @@ conda activate crisperWhisper
 # Install CrisperWhisper according to its documentation
 ```
 
-## Usage
+## 🚀 Usage
 
 ### Quick Start
 
@@ -167,11 +167,11 @@ $SPLIT_MAXLEN    = 180;                        // Max chunk length
 $SPLIT_SILENCE_DB = -45;                        // Silence threshold
 ```
 
-## Output
+## 📤 Output
 
 The processed video will be saved as `output_clean.mp4` in the working directory. Intermediate files are stored in the `chunks/` directory.
 
-## Pipeline Workflow
+## 🔄 Pipeline Workflow
 
 ```
 Input Video
@@ -183,7 +183,7 @@ Input Video
 [3] Remove Filler Words → output_clean.mp4
 ```
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### "conda not found in PATH"
 
@@ -216,13 +216,13 @@ $SPLIT_MAXLEN = 120;  # Reduce from 180 to 120 seconds
 $RF_CQ = 20;           # Lower quality (higher number = lower quality)
 ```
 
-## Performance
+## ⚡ Performance
 
 - Processing time depends on video duration and hardware
 - GPU acceleration can reduce encoding time by 10-20x
 - CPU-only processing takes significantly longer
 
-## File Structure
+## 📁 File Structure
 
 ```
 AutoVoiceCut/
@@ -265,6 +265,6 @@ AutoVoiceCut/
 
 <!-- ## License Information -->
 
-## Disclaimer
+## ⚠️ Disclaimer
 
 This tool is for personal use. Ensure you have the right to process and modify any video content before using this tool.
