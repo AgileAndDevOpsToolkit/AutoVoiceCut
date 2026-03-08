@@ -56,22 +56,33 @@ function cmd(array $parts) { return implode(' ', $parts); }
 /* =========================
  * Args
  * ========================= */
-if ($argc !== 2) {
-    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\"");
+if ($argc < 2 || $argc > 3) {
+    fail("Usage: php " . basename(__FILE__) . " \"/path/to/video.mkv|mp4\" [\"/path/to/transcribe.py\"]");
 }
 $inputVideo = $argv[1];
 if (!is_file($inputVideo)) {
     fail("Input video not found: " . $inputVideo);
 }
--$TRANSCRIBE_PY = $argv[2];
+// Si un chemin vers transcribe.py est fourni, l'utiliser; sinon utiliser la valeur par défaut
+if ($argc === 3) {
+    $TRANSCRIBE_PY = $argv[2];
+}
 
-$workdir = __DIR__;
-$splitScript        = $workdir . "/1_split_on_silence.php";
-$transcribeScript   = $workdir . "/2_transcribe_chunks_and_merge.php";
-$removeFillerScript = $workdir . "/3_remove_filler_singlepass_v3.php";
+// Le répertoire de travail est celui qui contient la vidéo d'entrée
+$videoDir = dirname(realpath($inputVideo));
+if (!is_dir($videoDir) || !is_writable($videoDir)) {
+    fail("Video directory is not accessible or writable: " . $videoDir);
+}
+$workdir = $videoDir;
+
+// Les scripts PHP restent dans le répertoire du script master
+$scriptDir = __DIR__;
+$splitScript        = $scriptDir . "/1_split_on_silence.php";
+$transcribeScript   = $scriptDir . "/2_transcribe_chunks_and_merge.php";
+$removeFillerScript = $scriptDir . "/3_remove_filler_singlepass_v3.php";
 
 foreach (array($splitScript, $transcribeScript, $removeFillerScript) as $p) {
-    if (!is_file($p)) fail("Missing script in same folder: " . $p);
+    if (!is_file($p)) fail("Missing script in master folder: " . $p);
 }
 
 // Determine MP4 path (create if needed)
