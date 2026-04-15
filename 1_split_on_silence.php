@@ -118,10 +118,11 @@ function detectSilences(string $in, float $silenceDb, float $silenceDur): array 
         }
     }
 
-    // We'll use "silence end" as candidate cut points (speech resumes after).
+    // On coupe au milieu du silence pour éviter de finir un chunk
+    // au moment exact où la parole reprend.
     $cutPoints = [];
     foreach ($silences as $s) {
-        $cutPoints[] = $s['end'];
+        $cutPoints[] = ($s['start'] + $s['end']) / 2.0;
     }
     sort($cutPoints);
 
