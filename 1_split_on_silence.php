@@ -256,6 +256,13 @@ while ($t0 < $totalDur - 0.01) {
         if ($t1 <= $t0 + 0.001) break;
     }
 
+    // >>> AJOUT : évite de créer un dernier chunk minuscule.
+    // Si le reste après la coupe est plus court que min_chunk, on l'absorbe
+    // dans le chunk courant plutôt que d'en faire un segment isolé.
+    if (($totalDur - $t1) < $minChunk) {
+        $t1 = $totalDur;
+    }
+
     $file = sprintf("chunk_%03d.%s", $idx, $format);
     $outFile = rtrim($outdir, "/") . "/" . $file;
 
